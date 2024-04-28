@@ -1,7 +1,7 @@
 # Hexapod Robot Build from Scratch
 This repository contains code and resources for developing a hexapod robot, a six-legged walking machine inspired by insects. Here, you'll find information on various aspects of design, construction, and control of your own hexapod robot.
 
-![Alt text]("Images/hexapod_build.jpg")
+![Hexapod](Images/hexapod_build.jpg)
 
 ## Overview
 ### Hexapod robots offer several advantages over their wheeled counterparts:
@@ -29,7 +29,7 @@ This repository contains code and resources for developing a hexapod robot, a si
 ### Resources
 This repository provides a starting point for your hexapod development journey. However, additional resources can be helpful:
 
-![Alt text]("Images/hexapod_parts.jpg")
+![Hexapod](Images/hexapod_parts.jpg)
 
 * Books: "Building Your Own Hexapod Robot" by David Drobeck, "Robot Building with LEGO Mindstorms EV3" by Mark Rollins
 * Websites: https://www.instructables.com/Capers-II-a-Hexapod-Robot/, https://www.robot-academy.com/
