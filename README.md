@@ -6,6 +6,7 @@ This repository contains code and resources for developing a hexapod robot, a si
 ## Overview
 ### Hexapod robots offer several advantages over their wheeled counterparts:
 
+
 * Versatility: Can navigate over rough terrain, climb obstacles, and adapt to uneven surfaces.
 * Stability: Multi-legged locomotion provides inherent stability compared to bipedal or uniped robots.
 * Biomimicry: Insights from biology can inspire efficient and adaptable movement patterns.
@@ -16,6 +17,8 @@ This repository contains code and resources for developing a hexapod robot, a si
 * Electronics: Provides schematics and wiring diagrams for connecting servos, motors, and sensors.
 * Software: Includes code for controlling the robot's movement using inverse kinematics, gait generation, and sensor feedback.
 * Documentation: Offers tutorials, explanations, and troubleshooting tips for each development stage.
+
+
 
 ## Getting Started
 * Hardware: Familiarize yourself with the hardware design and choose the suitable materials and tools for construction.
