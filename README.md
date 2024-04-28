@@ -34,8 +34,6 @@ This repository provides a starting point for your hexapod development journey. 
 	<img width = "50%" src="Images/hexapod_parts.jpg">
 </div>
 
-![Hexapod]()
-
 * Books: "Building Your Own Hexapod Robot" by David Drobeck, "Robot Building with LEGO Mindstorms EV3" by Mark Rollins
 * Websites: https://www.instructables.com/Capers-II-a-Hexapod-Robot/, https://www.robot-academy.com/
 * Forums: Let's Make Robots, RobotShop Community
