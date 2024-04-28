@@ -3,6 +3,10 @@ This repository contains code and resources for developing a hexapod robot, a si
 
 ![Hexapod](Images/hexapod_build.jpg)
 
+<div align="center">
+	<img width = "50%" src="Images/hexapod_build.jpg">
+</div>
+
 ## Overview
 ### Hexapod robots offer several advantages over their wheeled counterparts:
 
