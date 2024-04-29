@@ -38,8 +38,9 @@ bool RC_GetDataPackage() {
     char data_packet[48];
     radio.read(&data_packet, sizeof(data_packet));
     sscanf(data_packet, "%d,%d,%d,%d,%d,%d,%d",&gait_count, &joy1x, &joy1y, &joy2x, &joy2y, &liPo1, &liPo2);
-    RC_DisplayData();
+    // RC_DisplayData();
   }
+  return true;
 }
 
 void RC_DisplayData(){

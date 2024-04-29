@@ -70,10 +70,10 @@ float distanceFromGroundBase = -60;
 float distanceFromGround = 0;
 float previousDistanceFromGround = 0;
 
-float liftHeight = 130;
+float liftHeight = 80;
 float landHeight = 70;
 float strideOvershoot = 10;
-float distanceFromCenter = 190;
+float distanceFromCenter = 100;
 
 float crabTargetForwardAmount = 0;
 float crabForwardAmount = 0;
@@ -112,11 +112,10 @@ void setup() {
   hexapodLeg2.setPWMFreq(60);
 
   stateInitialize();
-  delay(10000);
+  delay(2000);
 }
 
 void loop() {
-  Serial.println("Hexapod Beginning");
   bool connected = RC_GetDataPackage();  // this is for the radio data
   if (connected) {
 
@@ -139,7 +138,7 @@ void loop() {
     distanceFromGround = distanceFromGroundBase + slider1 * -1.7;  
 
     // this is the distance from the centre of the body
-    distanceFromCenter = 140; 
+    distanceFromCenter = 180; 
 
   } 
 
@@ -151,25 +150,33 @@ void loop() {
 
   // some sort of gait selection
   previousGait = currentGait;
-  switch (gait_count) {
+
+  switch ((int)gait_count) {
     case 0:
       currentGaitID = 0;
+      currentGait = gaits[currentGaitID];
       break;
     case 1:
       currentGaitID = 1;
+      currentGait = gaits[currentGaitID];
       break;
     case 2:
       currentGaitID = 2;
+      currentGait = gaits[currentGaitID];
       break;
     case 3:
       currentGaitID = 3;
+      currentGait = gaits[currentGaitID];
       break;
     case 4:
       currentGaitID = 4;
+      currentGait = gaits[currentGaitID];
       break;
     case 5:
       currentGaitID = 5;
+      currentGait = gaits[currentGaitID];
       break;
+
     default:
       break;
   }
@@ -254,16 +261,12 @@ void inverseKinematics(int leg, Vector3 pos) {
   float theta3 = 180 - (phi3 * 180 / PI) + o3;
   // theta3 = -abs(theta3);
 
+
   // The theta are added because of initial or actual servo setup offsets
   // float angle1 = 45 + theta1;
   // float angle2 = 67 + theta2;
   // float angle3 = 135 + theta3;
-
   targetRot = Vector3(theta1, theta2, theta3);
-
-  // Serial.println(theta1);
-  // Serial.println(theta2);
-  // Serial.println(theta3);
   return;
 }
 
@@ -305,13 +308,14 @@ void moveToPos(int leg, Vector3 pos) {
   int tibiaMicroseconds = angleToMicroseconds(targetRot.z);
   
   // Legs are moving due to this block of code here
+  
   switch (leg) {
     case 0:
       moveLegs(0, targetRot.x, targetRot.y, targetRot.z);
       break;
 
     case 1:
-      moveLegs(1, targetRot.x, targetRot.y, targetRot.z);
+      moveLegs(1, targetRot.x, targetRot.y, targetRot.z);                                                                                   
       break;
 
     case 2:
@@ -319,7 +323,7 @@ void moveToPos(int leg, Vector3 pos) {
       break;
 
     case 3:
-      moveLegs(3, targetRot.x, targetRot.y, targetRot.z);
+      moveLegs(5, targetRot.x, targetRot.y, targetRot.z);
       break;
 
     case 4:
@@ -327,7 +331,7 @@ void moveToPos(int leg, Vector3 pos) {
       break;
 
     case 5:
-      moveLegs(5, targetRot.x, targetRot.y, targetRot.z);
+      moveLegs(3, targetRot.x, targetRot.y, targetRot.z);
       break;
 
     default:
@@ -374,6 +378,7 @@ void standingState() {
       legStates[i] = Standing;
     }
   }
+
   //update distance from ground constantly
   for (int i = 0; i < 6; i++) {
     SCPA[i][2] = standingEndPoint;
@@ -417,7 +422,6 @@ void standingState() {
     }
   }
 
-
   //constantly move to the standing end position
   for (int i = 0; i < 6; i++) {
     moveToPos(i, GetPointOnBezierCurve(SCPA[i], 3, 1));
@@ -460,6 +464,7 @@ void carState() {
       legStates[i] = Reset;
     }
 
+    Serial.println(currentGait);
     switch (currentGait) {
       case Tri:
         cycleProgress[0] = 0;
