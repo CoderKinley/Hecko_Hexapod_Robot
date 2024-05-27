@@ -1,6 +1,9 @@
 # Hexapod Robot Build from Scratch
 This repository contains code and resources for developing a hexapod robot, a six-legged walking machine inspired by insects. Here, you'll find information on various aspects of design, construction, and control of your own hexapod robot.
 
+Youtube Link:
+https://www.youtube.com/watch?v=k_0rts6SXuE&ab_channel=ReverseEngineering
+
 <div align="center">
 	<img width = "50%" src="Images/hexapod_build.jpg">
 </div>
