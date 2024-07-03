@@ -1,3 +1,8 @@
+/*
+ Coded by: Kinley Penjor
+ College of Science and Technology
+*/
+
 #include <math.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -57,6 +62,14 @@ Adafruit_PWMServoDriver hexapodLeg2 = Adafruit_PWMServoDriver(0x41);
 //   _____________________________((((((((((((###____________________________       
 
 //  //////////////////////////    CONFIGURATION   ///////////////////////////
+
+// defines pins numbers for ultrasonic sensor
+const int trigPin = 9;
+const int echoPin = 10;
+
+// defines variables
+long duration;
+int distance;
 
 const int legPins[6][3] = {
   {0, 1, 2},  // Leg 1: Coxa, Femur, Tibia // 1ST PCA
@@ -139,8 +152,10 @@ long elapsedTime = 0;
 long loopStartTime = 0;
 
 void setup() {
-  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
   
+  Serial.begin(9600);
   // for wireless communication
   RC_Setup();
   
@@ -156,14 +171,16 @@ void setup() {
 }
 
 void loop() {
+  double calcjoyval = map(joy1x, 0, 1023, -100, 100);
+  float ultrasonic_val_data = ultrasonic_Sensor_data();
   bool connected = RC_GetDataPackage();  // this is for the radio data
   if (connected) {
 
     // the analogRead is later fetched from the radio control
-    double joy1xval = map(joy1x, 0, 1023, -100, 100);
-    double joy1yval = map(joy1y, 0, 1023, -100, 100);
-    double joy2xval = map(joy2x, 0, 1023, 100, -100);
-    double joy2yval = map(joy2y, 0, 1023, 100, -100);
+    double joy1xval = map(joy1y, 0, 1023, -100, 100);
+    double joy1yval = map(joy1x, 0, 1023, -100, 100);
+    double joy2xval = map(joy2y, 0, 1023, -100, 100);
+    double joy2yval = map(joy2x, 0, 1023, 100, -100);
 
     joy1TargetVector = Vector2(joy1xval, joy1yval);
     joy1TargetMagnitude = constrain(calculateHypotenuse(abs(joy1xval), abs(joy1yval)), 0, 100);
@@ -177,7 +194,7 @@ void loop() {
     // distance from the ground determined by the slider 1 value
     distanceFromGround = distanceFromGroundBase + slider1 * -1.7;  
 
-    // this is the distance from the centre of the body
+    // this is the distance from the centre of the body it can be changed
     distanceFromCenter = 180; 
 
   } 
@@ -223,8 +240,13 @@ void loop() {
 
   // bool carStates = true;
   if (abs(joy1CurrentMagnitude) >= 10 || abs(joy2CurrentMagnitude) >= 10) {
-    carState();
-    timeSinceLastInput = millis();
+    if (ultrasonic_val_data < 25 && calcjoyval < 0 && connected ){
+      Serial.println("Object Infront detected turn back....");
+    }
+    else{
+      carState();
+      timeSinceLastInput = millis();
+    }
     return;
   }
 
@@ -236,14 +258,6 @@ void loop() {
 
 // Initialize the robot
 void stateInitialize() {
-  moveToPos(0, Vector3(160, 0, 0));
-  moveToPos(1, Vector3(160, 0, 0));
-  moveToPos(2, Vector3(160, 0, 0));
-  moveToPos(3, Vector3(160, 0, 0));
-  moveToPos(4, Vector3(160, 0, 0));
-  moveToPos(5, Vector3(160, 0, 0));
-  delay(1000);
-
   moveToPos(0, Vector3(225, 0, 115));
   moveToPos(1, Vector3(225, 0, 115));
   moveToPos(2, Vector3(225, 0, 115));
@@ -348,7 +362,6 @@ void moveToPos(int leg, Vector3 pos) {
   int tibiaMicroseconds = angleToMicroseconds(targetRot.z);
   
   // Legs are moving due to this block of code here
-  
   switch (leg) {
     case 0:
       moveLegs(0, targetRot.x, targetRot.y, targetRot.z);
@@ -363,7 +376,7 @@ void moveToPos(int leg, Vector3 pos) {
       break;
 
     case 3:
-      moveLegs(5, targetRot.x, targetRot.y, targetRot.z);
+      moveLegs(3, targetRot.x, targetRot.y, targetRot.z);
       break;
 
     case 4:
@@ -371,7 +384,7 @@ void moveToPos(int leg, Vector3 pos) {
       break;
 
     case 5:
-      moveLegs(3, targetRot.x, targetRot.y, targetRot.z);
+      moveLegs(5, targetRot.x, targetRot.y, targetRot.z);
       break;
 
     default:
@@ -730,4 +743,22 @@ int binomialCoefficient(int n, int k) {
     result /= i;
   }
   return result;
+}
+
+//<---------------------------------Sensor Ultrasonic Sensor---------------------------------------------------------->
+float ultrasonic_Sensor_data() {
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  float distance = duration * 0.034 / 2;  // Convert duration to distance
+  // Serial.println(distance);
+  // Prints the distance on the Serial Monitor
+  return distance;
 }
